@@ -27,20 +27,39 @@
     "id": 3
   },
   {
-    "title": "4",
-    "description": "harina",
-    "price": 3500,
-    "thumbnail": "imagen",
-    "stock": 100,
-    "code": "A1",
-    "id": 4
-  },
-  {
     "title": "actualizado",
     "description": "harina",
     "price": 3500,
     "thumbnail": "imagen",
     "stock": 100,
-    "code": "A1"
+    "code": "A1",
+    "id": 5
+  },
+  {
+    "inputTitleValue": "hola",
+    "inputDescriptionValue": "",
+    "inputPriceValue": "",
+    "inputThumbnailValue": "",
+    "inputStockValue": "",
+    "inputCodeValue": "",
+    "id": 5
+  },
+  {
+    "inputTitleValue": "hola",
+    "inputDescriptionValue": "",
+    "inputPriceValue": "",
+    "inputThumbnailValue": "",
+    "inputStockValue": "",
+    "inputCodeValue": "",
+    "id": 6
+  },
+  {
+    "inputTitleValue": "Crema",
+    "inputDescriptionValue": "Este es un producto Lacteo",
+    "inputPriceValue": "5000",
+    "inputThumbnailValue": "img",
+    "inputStockValue": "54",
+    "inputCodeValue": "58598",
+    "id": 7
   }
 ]

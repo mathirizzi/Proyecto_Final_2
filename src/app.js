@@ -9,7 +9,8 @@ import ProductManager from './ProductManager.js';
 
 //-------------------------SERVIDOR------------------------------//
 const app = express();
-const httpServer = app.listen(8080, ()=> console.log("Listening on PORT 8080"));
+const PORT = 8080 || process.env.PORT
+const httpServer = app.listen(PORT, ()=> console.log("Listening on PORT 8080"));
 const socketServer = new Server(httpServer);
 
 //-------------------------PLANTILLAS------------------------------//
@@ -25,12 +26,23 @@ app.use("/products", productsRouter);
 app.use("/carts", cartsRouter);
 app.use("/products", ()=>{});
 
+//socket lado servidor
+const products = new ProductManager("products.json");
+const productList = await products.getProducts()
+     
+
 socketServer.on('connection', socket=>{
   console.log("Nuevo cliente conectado")
 
+socket.emit("lista-de-productos", productList)
 
-socket.on("message", data =>{
-  console.log(data)
-});
+socket.on("id-producto-eliminado", data =>{
+  products.deleteProduct(parseInt(data))
+})
+
+socket.on("producto-creado", data =>{
+  
+  products.addProduct(newProduct)
+})
 
 });
