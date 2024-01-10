@@ -41,7 +41,14 @@ socket.on("id-producto-eliminado", data =>{
 })
 
 socket.on("producto-creado", data =>{
-  
+  const newProduct = {
+    title: data.inputTitleValue,
+    description: data.inputDescriptionValue,
+    price: data.inputPriceValue,
+    thumbnail: data.inputThumbnailValue,
+    stock: data.inputStockValue,
+    code: data.inputCodeValue
+  }
   products.addProduct(newProduct)
 })
 
