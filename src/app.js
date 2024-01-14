@@ -6,10 +6,12 @@ import {Server} from 'socket.io';
 import productsRouter from "./routers/products.router.js"
 import cartsRouter from "./routers/carts.router.js"
 import ProductManager from './ProductManager.js';
+import connectBD from './config/connectDB.js'
 
 //-------------------------SERVIDOR------------------------------//
 const app = express();
 const PORT = 8080 || process.env.PORT
+connectBD()
 const httpServer = app.listen(PORT, ()=> console.log("Listening on PORT 8080"));
 const socketServer = new Server(httpServer);
 

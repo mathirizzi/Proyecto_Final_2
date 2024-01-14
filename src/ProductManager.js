@@ -28,6 +28,8 @@ class ProductManager {
        await productsList.push({ ...newProduct, id: productsList.length + 1 });
       }
 
+      
+
       await fs.promises.writeFile(
         this.path,
         JSON.stringify(productsList, null, 2)
