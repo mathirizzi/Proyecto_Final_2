@@ -28,7 +28,7 @@ const router = Router();
 router.get('/:pid', async (req,res)=>{
     try {
         const {pid} = req.params;   
-        const resultID = await products.getProductById(parseInt(pid))
+        const resultID = await productModel.findOne({_id: pid})
         res.send({
             status: 'success',
             result: resultID
