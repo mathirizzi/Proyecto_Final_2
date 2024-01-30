@@ -8,11 +8,13 @@ const productsSchema = new mongoose.Schema({
     price: Number,
     thumbnail: String,
     stock: Number,
-    code: String
+    code: {
+        type: String,
+        unique: true,
+        required: true
+    }
 })
 
 const productModel = mongoose.model(productsCollection, productsSchema)
 
-module.exports = {
-    productModel
-}
+export default productModel;
