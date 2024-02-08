@@ -8,10 +8,10 @@ const router = Router();
 
 router.get('/', async (req,res)=>{
     try{
-       const result = await carts.getCarts()
+       const cartsList = await carts.getCarts()
       res.send({
         status: 'success',
-        result: result
+        result: cartsList
       })
 }   catch (error) {
     res.status(500).send('Error de servidor')
@@ -22,7 +22,7 @@ router.get('/', async (req,res)=>{
 router.get('/:cid', async (req,res)=>{
     try {
         const {cid} = req.params;   
-        const resultID = await carts.getCartById(parseInt(cid))
+        const resultID = await carts.getCartById(cid)
         res.send({
             status: 'success',
             result: resultID
@@ -32,12 +32,23 @@ router.get('/:cid', async (req,res)=>{
     }
 })
 
+router.delete('/:cid', async (req,res)=>{
+    const {cid} = req.params;
+    const cartDeleted = await carts.deleteCartById(cid)
+    res.send({
+        status: 'success',
+        result: cartDeleted
+    })
+})
+
 router.post('/', async (req,res)=>{
     try {
-        const result = await carts.createCart()
+        const newCart = await carts.createCart({
+            products: []
+        })
         res.send({
             status: 'success',
-            payload: result
+            payload: newCart
         })
         
     } catch (error) {
@@ -46,11 +57,11 @@ router.post('/', async (req,res)=>{
     }
 })
 
-router.post('/:cid/products/:pid', async (req,res)=>{
+router.put('/:cid/products/:pid', async (req,res)=>{
     try {
         const {cid,pid} = req.params
         //const {quantity} = req.body
-        const result = await carts.addProductToCart(Number(cid),Number(pid))
+        const result = await carts.addProductToCart(cid, pid)
         res.send({
             status: 'success',
             payload: result

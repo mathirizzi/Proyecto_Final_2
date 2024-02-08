@@ -1,100 +1,43 @@
 import fs from "fs"
+import cartModel from "./daos/models/carts.models.js"
+import productModel from "./daos/models/products.models.js"
 
 class CartManager {
-  constructor(cartsFile) {
-    this.path = cartsFile;
-  }
-
-  //----------Para leer archivo json.----------//
-  async readFileCarts() {
-    try {
-      const cartsData = await fs.promises.readFile(this.path, "utf-8");
-      const cartsJs = await JSON.parse(cartsData);
-    return cartsJs;
-      
-    } catch (error) {
-      return [];
-    }
-  }
 
   //--------------------Para crear un carrito nuevo--------------------//
-async createCart(){
-    try {
-        let carts = await this.readFileCarts()
-        let newCart = {
-            id: carts.length + 1,
-            products : []
-        }
-        carts.push(newCart)
-        await fs.promises.writeFile(this.path, JSON.stringify(carts, null, 2))
-        return newCart
-        
-    } catch (error) {
-        return 'Error al crear el carrito'
-        
-    }
+async createCart(newCart){
+   return await cartModel.create(newCart)
 }
 
    //--------------------Para ver la lista de carritos--------------------//
 
    async getCarts() {
-    try {
-        const carts = await this.readFileCarts()
-        return carts
-        
-    } catch (error) {
-        console.log(error)
-        
-    }
+   return await cartModel.find({})
    }
 
     //--------------------Para ver carrito por su ID--------------------//
 async getCartById(cid){
-    try {
-        const carts = await this.readFileCarts()
-        const cart = carts.find(cart => cart.id === cid)
+    return await cartModel.findOne({_id: cid})
+}
 
-        if (!cart) {
-            return 'No se encuentra el carrito'
-        }
-        return cart
-        
-    } catch (error) {
-        console.log(error)
-        
-    }
+    //--------------------Para eliminar carrito por su ID--------------------//
+async deleteCartById(cid){
+    return await cartModel.findByIdAndDelete({_id: cid})
 }
 
 
      //--------------------Para agregar un producto al carrito--------------------//
-  async addProductToCart(cid,pid){
-    try {
-        
+
+     async addProductToCart(cid,pid){
+        const cartIdx = await cartModel.findById({_id: cid})
+        const productIdx = await productModel.findById({_id: pid})
+        cartIdx.products.push({product: productIdx.id})
+        return await cartModel.findByIdAndUpdate({_id: cid}, cartIdx)
+
+
+     }
+
     
-    const cartsList = await this.readFileCarts()
-    const cartIdx = cartsList.findIndex(cart => cart.id === cid)
-
-    if(cartIdx === -1){
-        return 'El carrito seleccionado no existe'
-    }
-    const productIdx = cartsList[cartIdx].products.findIndex(produc => produc.product === pid)
-    if(productIdx === -1){
-        cartsList[cartIdx].products.push({
-            product: pid,
-            quantity: 1
-        })
-    }else{
-        cartsList[cartIdx].products[productIdx].quantity += 1
-    }
-    await fs.promises.writeFile(this.path, JSON.stringify(cartsList, null, 2), "utf-8")
-  return cartsList[cartIdx]
-}
-  catch (error) {
-    console.log(error)
-        
-}
-} 
-
     }
 
 export default CartManager;

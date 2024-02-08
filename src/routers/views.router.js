@@ -1,9 +1,12 @@
 import express from 'express';
 import ProductManager from '../ProductManager.js';
+import productModel from '../daos/models/products.models.js';
 const products = new ProductManager("products.json");
 
 
 const router = express.Router();
+
+//------------------------------------------//
 
 router.get('/realtimeproducts',async (req,res)=>{
     try{
@@ -16,6 +19,8 @@ router.get('/realtimeproducts',async (req,res)=>{
 }
 })
 
+//------------------------------------------//
+
 
 router.get('/', async (req,res)=>{
     try{
@@ -25,6 +30,28 @@ router.get('/', async (req,res)=>{
 }   catch (error) {
     res.status(500).send('Error de servidor')
 }
+
+//------------------------------------------//
+
+router.get('/products', async (req,res)=>{
+    const {limit = 5, pageQuery = 1} = req.query
+    const {
+        docs,
+        hasPrevPage,
+        hasNextPage,
+        prevPage,
+        nextPage,
+        page
+    } = await productModel.paginate({}, {limit, page: pageQuery, lean: true})
+    res.render('products', {
+        products: docs,
+        hasPrevPage,
+        hasNextPage,
+        prevPage,
+        nextPage,
+        page
+    })
+})
 
 })
 
